@@ -8,24 +8,35 @@ public class Polygon {
     private ArrayList<Integer> textureVertexIndices;
     private ArrayList<Integer> normalIndices;
 
-
     public Polygon() {
-        vertexIndices = new ArrayList<Integer>();
-        textureVertexIndices = new ArrayList<Integer>();
-        normalIndices = new ArrayList<Integer>();
+        this.vertexIndices = new ArrayList<>();
+        this.textureVertexIndices = new ArrayList<>();
+        this.normalIndices = new ArrayList<>();
     }
 
-    public void setVertexIndices(ArrayList<Integer> vertexIndices) {
+    public void addVertexIndex(final int vertexIndex) {
+        this.vertexIndices.add(vertexIndex);
+    }
+
+    public void addTextureVertexIndex(final int textureVertexIndex) {
+        this.textureVertexIndices.add(textureVertexIndex);
+    }
+
+    public void addNormalIndex(final int normalIndex) {
+        this.normalIndices.add(normalIndex);
+    }
+
+    public void setVertexIndices(final ArrayList<Integer> vertexIndices) {
         assert vertexIndices.size() >= 3;
         this.vertexIndices = vertexIndices;
     }
 
-    public void setTextureVertexIndices(ArrayList<Integer> textureVertexIndices) {
+    public void setTextureVertexIndices(final ArrayList<Integer> textureVertexIndices) {
         assert textureVertexIndices.size() >= 3;
         this.textureVertexIndices = textureVertexIndices;
     }
 
-    public void setNormalIndices(ArrayList<Integer> normalIndices) {
+    public void setNormalIndices(final ArrayList<Integer> normalIndices) {
         assert normalIndices.size() >= 3;
         this.normalIndices = normalIndices;
     }
@@ -40,5 +51,11 @@ public class Polygon {
 
     public ArrayList<Integer> getNormalIndices() {
         return normalIndices;
+    }
+
+    public boolean equals(final Polygon other) {
+        return (this.vertexIndices.equals(other.vertexIndices)) &&
+                (this.textureVertexIndices.equals(other.textureVertexIndices)) &&
+                (this.normalIndices.equals(other.normalIndices));
     }
 }

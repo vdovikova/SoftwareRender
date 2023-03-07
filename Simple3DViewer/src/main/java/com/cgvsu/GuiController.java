@@ -1,5 +1,7 @@
 package com.cgvsu;
 
+import com.cgvsu.objreader.ObjReaderException;
+import com.cgvsu.objwriter.ObjWriter;
 import com.cgvsu.render_engine.RenderEngine;
 import javafx.fxml.FXML;
 import javafx.animation.Animation;
@@ -15,6 +17,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.io.IOException;
 import java.io.File;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.vecmath.Vector3f;
 
 import com.cgvsu.model.Model;
@@ -70,6 +74,7 @@ public class GuiController {
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Model (*.obj)", "*.obj"));
         fileChooser.setTitle("Load Model");
 
+
         File file = fileChooser.showOpenDialog((Stage) canvas.getScene().getWindow());
         if (file == null) {
             return;
@@ -84,6 +89,53 @@ public class GuiController {
         } catch (IOException exception) {
 
         }
+    }
+
+    @FXML
+    private void onOpenModelMenuItemClick2() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Model (*.obj)", "*.obj"));
+        fileChooser.setTitle("Save Model");
+
+        File file = fileChooser.showOpenDialog((Stage) canvas.getScene().getWindow());
+        if (file == null) {
+            return;
+        }
+        //чтение файла
+        Path fileName = Path.of(file.getAbsolutePath());
+        String fileSeparator = System.getProperty("file.separator");
+
+        Model m1 = new Model();
+        try {
+            String fileContent = Files.readString(fileName);
+            System.out.println("Loading model ...");
+            m1 = ObjReader.read(fileContent);
+
+            System.out.println("Vertices: " + m1.getVertices().size());
+            System.out.println("Texture vertices: " + m1.getTextureVertices().size());
+            System.out.println("Normals: " + m1.getNormals().size());
+            System.out.println("Polygons: " + m1.getPolygons().size());
+        } catch (IOException exception) {
+            throw new ObjReaderException("File not found", 1);
+        }
+
+        //запись файла
+        String filePath = "C:\\aPersonal\\VSU CS\\CG" + fileSeparator + "savedmodel.obj";
+        try {
+            System.out.println("Creating file");
+            ObjWriter.createObjFile(filePath);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        File f = new File(filePath);
+        try {
+            System.out.println("Writing to file");
+            ObjWriter.writeToFile(m1, f);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        System.out.println("Saved");
     }
 
     @FXML
