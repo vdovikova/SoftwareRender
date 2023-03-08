@@ -1,61 +1,62 @@
 package com.cgvsu.model;
 
+import java.awt.*;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Polygon {
 
-    private ArrayList<Integer> vertexIndices;
-    private ArrayList<Integer> textureVertexIndices;
-    private ArrayList<Integer> normalIndices;
+    private List<Integer> vertexIndices;
+    private List<Integer> textureVertexIndices;
+    private List<Integer> normalIndices;
 
     public Polygon() {
-        this.vertexIndices = new ArrayList<>();
-        this.textureVertexIndices = new ArrayList<>();
-        this.normalIndices = new ArrayList<>();
+        vertexIndices = new ArrayList<>();
+        textureVertexIndices = new ArrayList<>();
+        normalIndices = new ArrayList<>();
     }
 
-    public void addVertexIndex(final int vertexIndex) {
-        this.vertexIndices.add(vertexIndex);
+    public Polygon(final List<Integer> vertexIndices, final List<Integer> textureVertexIndices, final List<Integer> normalIndices) {
+        this.vertexIndices = vertexIndices;
+        this.textureVertexIndices = textureVertexIndices;
+        this.normalIndices = normalIndices;
     }
 
-    public void addTextureVertexIndex(final int textureVertexIndex) {
-        this.textureVertexIndices.add(textureVertexIndex);
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+
+        if (obj == null || getClass() != obj.getClass()) return false;
+
+        Polygon other = (Polygon) obj;
+        return this.getVertexIndices().equals(other.getVertexIndices())
+                && this.getTextureVertexIndices().equals(other.getTextureVertexIndices())
+                && this.getNormalIndices().equals(other.getNormalIndices());
     }
 
-    public void addNormalIndex(final int normalIndex) {
-        this.normalIndices.add(normalIndex);
-    }
-
-    public void setVertexIndices(final ArrayList<Integer> vertexIndices) {
+    public void setVertexIndices(final List<Integer> vertexIndices) {
         assert vertexIndices.size() >= 3;
         this.vertexIndices = vertexIndices;
     }
 
-    public void setTextureVertexIndices(final ArrayList<Integer> textureVertexIndices) {
-        assert textureVertexIndices.size() >= 3;
+    public void setTextureVertexIndices(final List<Integer> textureVertexIndices) {
+        //assert textureVertexIndices.size() >= 3;
         this.textureVertexIndices = textureVertexIndices;
     }
 
-    public void setNormalIndices(final ArrayList<Integer> normalIndices) {
-        assert normalIndices.size() >= 3;
+    public void setNormalIndices(final List<Integer> normalIndices) {
+        //assert normalIndices.size() >= 3;
         this.normalIndices = normalIndices;
     }
 
-    public ArrayList<Integer> getVertexIndices() {
+    public List<Integer> getVertexIndices() {
         return vertexIndices;
     }
 
-    public ArrayList<Integer> getTextureVertexIndices() {
+    public List<Integer> getTextureVertexIndices() {
         return textureVertexIndices;
     }
 
-    public ArrayList<Integer> getNormalIndices() {
+    public List<Integer> getNormalIndices() {
         return normalIndices;
-    }
-
-    public boolean equals(final Polygon other) {
-        return (this.vertexIndices.equals(other.vertexIndices)) &&
-                (this.textureVertexIndices.equals(other.textureVertexIndices)) &&
-                (this.normalIndices.equals(other.normalIndices));
     }
 }

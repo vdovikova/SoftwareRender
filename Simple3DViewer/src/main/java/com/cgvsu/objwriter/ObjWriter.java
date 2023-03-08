@@ -8,6 +8,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.List;
 
 public class ObjWriter {
     public static void createObjFile(String absoluteFilePath) throws IOException {
@@ -19,10 +20,10 @@ public class ObjWriter {
     public static void writeToFile(Model model, File file) throws IOException {
         String str = "";
 
-        str += writeVertexes(model.vertices);
-        str += writeTextureVertexes(model.textureVertices);
-        str += writeNormals(model.normals);
-        str += writePolygons(model.polygons);
+        str += writeVertexes((ArrayList<Vector3f>) model.vertices);
+        str += writeTextureVertexes((ArrayList<Vector2f>) model.textureVertices);
+        str += writeNormals((ArrayList<Vector3f>) model.normals);
+        str += writePolygons((ArrayList<Polygon>) model.polygons);
 
         toFile(str, file.getAbsolutePath());
     }

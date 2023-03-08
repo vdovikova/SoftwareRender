@@ -5,19 +5,19 @@
 <?import javafx.scene.input.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane fx:id="anchorPane" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/11.0.2" fx:controller="com.cgvsu.GuiController">
+<AnchorPane fx:id="anchorPane" styleClass="background" stylesheets="@../../../../java/com/cgvsu/DarkTheme.css" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cgvsu.GuiController">
     <MenuBar prefHeight="25.0" prefWidth="549.0">
         <Menu mnemonicParsing="false" text="File">
-            <MenuItem mnemonicParsing="false" onAction="#onOpenModelMenuItemClick" text="Load Model">
-            <accelerator>
-                <KeyCodeCombination alt="UP" code="F" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
-            </accelerator>
+            <MenuItem mnemonicParsing="false" onAction="#onOpenModelMenuItemReadClick" text="Load Model">
+                <accelerator>
+                    <KeyCodeCombination alt="UP" code="F" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                </accelerator>
             </MenuItem>
-         <MenuItem mnemonicParsing="false" onAction="#onOpenModelMenuItemClick2" text="Save Model">
-            <accelerator>
-               <KeyCodeCombination alt="UP" code="F" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
-            </accelerator>
-         </MenuItem>
+            <MenuItem mnemonicParsing="false" onAction="#onOpenModelMenuItemWriteClick" text="Save Model">
+                <accelerator>
+                    <KeyCodeCombination alt="UP" code="F" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                </accelerator>
+            </MenuItem>
         </Menu>
         <Menu mnemonicParsing="false" text="Camera Options">
             <MenuItem mnemonicParsing="false" onAction="#handleCameraForward" text="Forward">
@@ -51,6 +51,12 @@
                 </accelerator>
             </MenuItem>
         </Menu>
+      <Menu mnemonicParsing="false" text="Choose active model">
+        <items>
+          <MenuItem mnemonicParsing="false" text="Model 1" />
+            <MenuItem mnemonicParsing="false" text="Model 2" />
+        </items>
+      </Menu>
     </MenuBar>
 
     <Canvas fx:id="canvas" height="870" width="1600" AnchorPane.topAnchor="30.0" />

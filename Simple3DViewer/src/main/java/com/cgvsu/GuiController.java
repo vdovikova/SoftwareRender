@@ -35,6 +35,9 @@ public class GuiController {
     @FXML
     private Canvas canvas;
 
+    @FXML
+    private Canvas canvas2;
+
     private Model mesh = null;
 
     private Camera camera = new Camera(
@@ -69,13 +72,13 @@ public class GuiController {
     }
 
     @FXML
-    private void onOpenModelMenuItemClick() {
+    private void onOpenModelMenuItemReadClick() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Model (*.obj)", "*.obj"));
         fileChooser.setTitle("Load Model");
 
 
-        File file = fileChooser.showOpenDialog((Stage) canvas.getScene().getWindow());
+        File file = fileChooser.showOpenDialog(canvas.getScene().getWindow());
         if (file == null) {
             return;
         }
@@ -92,12 +95,12 @@ public class GuiController {
     }
 
     @FXML
-    private void onOpenModelMenuItemClick2() {
+    private void onOpenModelMenuItemWriteClick() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Model (*.obj)", "*.obj"));
         fileChooser.setTitle("Save Model");
 
-        File file = fileChooser.showOpenDialog((Stage) canvas.getScene().getWindow());
+        File file = fileChooser.showOpenDialog(canvas.getScene().getWindow());
         if (file == null) {
             return;
         }
@@ -105,7 +108,7 @@ public class GuiController {
         Path fileName = Path.of(file.getAbsolutePath());
         String fileSeparator = System.getProperty("file.separator");
 
-        Model m1 = new Model();
+        Model m1;
         try {
             String fileContent = Files.readString(fileName);
             System.out.println("Loading model ...");
@@ -116,7 +119,7 @@ public class GuiController {
             System.out.println("Normals: " + m1.getNormals().size());
             System.out.println("Polygons: " + m1.getPolygons().size());
         } catch (IOException exception) {
-            throw new ObjReaderException("File not found", 1);
+            throw new ObjReaderException.ObjContentException("File not found");
         }
 
         //запись файла
