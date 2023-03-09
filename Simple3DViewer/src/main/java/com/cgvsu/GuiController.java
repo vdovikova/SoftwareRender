@@ -2,6 +2,7 @@ package com.cgvsu;
 
 import com.cgvsu.objreader.ObjReaderException;
 import com.cgvsu.objwriter.ObjWriter;
+import com.cgvsu.polygonDeleter.PolygonDeleter;
 import com.cgvsu.render_engine.RenderEngine;
 import javafx.fxml.FXML;
 import javafx.animation.Animation;
@@ -141,6 +142,38 @@ public class GuiController {
         System.out.println("Saved");
     }
 
+    @FXML
+    private void deletePoly() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Model (*.obj)", "*.obj"));
+        fileChooser.setTitle("Save Model");
+
+        File file = fileChooser.showOpenDialog(canvas.getScene().getWindow());
+        if (file == null) {
+            return;
+        }
+        //чтение файла
+        Path fileName = Path.of(file.getAbsolutePath());
+        String fileSeparator = System.getProperty("file.separator");
+        Model m1;
+        try {
+            String fileContent = Files.readString(fileName);
+            System.out.println("Loading model ...");
+            m1 = ObjReader.read(fileContent);
+
+            System.out.println("Vertices: " + m1.getVertices().size());
+            System.out.println("Texture vertices: " + m1.getTextureVertices().size());
+            System.out.println("Normals: " + m1.getNormals().size());
+            System.out.println("Polygons: " + m1.getPolygons().size());
+        } catch (IOException exception) {
+            throw new ObjReaderException.ObjContentException("File not found");
+        }
+
+        //удаление всего
+        for (int i = 1; i < m1.polygons.size(); i++) {
+            mesh = PolygonDeleter.deletePolygon(m1, i);
+        }
+    }
     @FXML
     public void handleCameraForward(ActionEvent actionEvent) {
         camera.movePosition(new Vector3f(0, 0, -TRANSLATION));

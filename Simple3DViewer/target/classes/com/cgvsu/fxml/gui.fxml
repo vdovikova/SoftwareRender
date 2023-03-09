@@ -57,6 +57,11 @@
             <MenuItem mnemonicParsing="false" text="Model 2" />
         </items>
       </Menu>
+      <Menu mnemonicParsing="false" text="Delete poly">
+        <items>
+          <MenuItem mnemonicParsing="false" text="Delete poly 1" />
+        </items>
+      </Menu>
     </MenuBar>
 
     <Canvas fx:id="canvas" height="870" width="1600" AnchorPane.topAnchor="30.0" />
