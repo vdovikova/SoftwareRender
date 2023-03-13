@@ -11,6 +11,7 @@ import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 import javafx.stage.FileChooser;
 import javafx.util.Duration;
@@ -35,9 +36,6 @@ public class GuiController {
 
     @FXML
     private Canvas canvas;
-
-    @FXML
-    private Canvas canvas2;
 
     private Model mesh = null;
 
@@ -65,7 +63,7 @@ public class GuiController {
 
             if (mesh != null) {
                 RenderEngine.render(canvas.getGraphicsContext2D(), camera, mesh, (int) width, (int) height);
-            }
+            } //цикл по списку моделей, рендерим активные модели
         });
 
         timeline.getKeyFrames().add(frame);
@@ -88,43 +86,25 @@ public class GuiController {
 
         try {
             String fileContent = Files.readString(fileName);
-            mesh = ObjReader.read(fileContent);
+            mesh = ObjReader.read(fileContent); //добавлять в список моделей
             // todo: обработка ошибок
         } catch (IOException exception) {
-
+            //обработать исключения здесь
         }
     }
 
     @FXML
     private void onOpenModelMenuItemWriteClick() {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Model (*.obj)", "*.obj"));
-        fileChooser.setTitle("Save Model");
+        DirectoryChooser directoryChooser = new DirectoryChooser();
+        directoryChooser.setTitle("Save Model");
+        String localPath = "";
 
-        File file = fileChooser.showOpenDialog(canvas.getScene().getWindow());
-        if (file == null) {
-            return;
-        }
-        //чтение файла
-        Path fileName = Path.of(file.getAbsolutePath());
-        String fileSeparator = System.getProperty("file.separator");
-
-        Model m1;
-        try {
-            String fileContent = Files.readString(fileName);
-            System.out.println("Loading model ...");
-            m1 = ObjReader.read(fileContent);
-
-            System.out.println("Vertices: " + m1.getVertices().size());
-            System.out.println("Texture vertices: " + m1.getTextureVertices().size());
-            System.out.println("Normals: " + m1.getNormals().size());
-            System.out.println("Polygons: " + m1.getPolygons().size());
-        } catch (IOException exception) {
-            throw new ObjReaderException.ObjContentException("File not found");
+        File dir = directoryChooser.showDialog(canvas.getScene().getWindow());
+        if (dir != null) {
+            localPath = dir.getAbsolutePath();
         }
 
-        //запись файла
-        String filePath = "C:\\aPersonal\\VSU CS\\CG" + fileSeparator + "savedmodel.obj";
+        String filePath = localPath + "\\savedModel.obj";
         try {
             System.out.println("Creating file");
             ObjWriter.createObjFile(filePath);
@@ -135,7 +115,7 @@ public class GuiController {
         File f = new File(filePath);
         try {
             System.out.println("Writing to file");
-            ObjWriter.writeToFile(m1, f);
+            ObjWriter.writeToFile(mesh, f);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -144,36 +124,18 @@ public class GuiController {
 
     @FXML
     private void deletePoly() {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Model (*.obj)", "*.obj"));
-        fileChooser.setTitle("Save Model");
-
-        File file = fileChooser.showOpenDialog(canvas.getScene().getWindow());
-        if (file == null) {
-            return;
-        }
-        //чтение файла
-        Path fileName = Path.of(file.getAbsolutePath());
-        String fileSeparator = System.getProperty("file.separator");
-        Model m1;
-        try {
-            String fileContent = Files.readString(fileName);
-            System.out.println("Loading model ...");
-            m1 = ObjReader.read(fileContent);
-
-            System.out.println("Vertices: " + m1.getVertices().size());
-            System.out.println("Texture vertices: " + m1.getTextureVertices().size());
-            System.out.println("Normals: " + m1.getNormals().size());
-            System.out.println("Polygons: " + m1.getPolygons().size());
-        } catch (IOException exception) {
-            throw new ObjReaderException.ObjContentException("File not found");
-        }
-
+        int size = mesh.polygons.size();
         //удаление всего
-        for (int i = 1; i < m1.polygons.size(); i++) {
-            mesh = PolygonDeleter.deletePolygon(m1, i);
+        for (int i = 1; i < size; i++) {
+            PolygonDeleter.deletePolygon(mesh, i);
         }
+        System.out.println("Vertices: " + mesh.getVertices().size());
+        System.out.println("Texture vertices: " + mesh.getTextureVertices().size());
+        System.out.println("Normals: " + mesh.getNormals().size());
+        System.out.println("Polygons: " + mesh.getPolygons().size());
     }
+
+
     @FXML
     public void handleCameraForward(ActionEvent actionEvent) {
         camera.movePosition(new Vector3f(0, 0, -TRANSLATION));

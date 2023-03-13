@@ -9,7 +9,7 @@ import java.util.Iterator;
 
 public class PolygonDeleter {
 
-    public static Model deletePolygon(Model model, int polygonIndex) {
+    public static void deletePolygon(final Model model, int polygonIndex) {
         Polygon polygon = model.polygons.get(polygonIndex);
         ArrayList<Integer> vertices = (ArrayList<Integer>) polygon.getVertexIndices();
 
@@ -22,8 +22,6 @@ public class PolygonDeleter {
                 deleteFreeVertices(model, freeVertices);
             }
         }
-
-        return model;
     }
 
     protected static ArrayList<Integer> findFreeVertices(Model model, ArrayList<Integer> vertexIndices) {

@@ -59,7 +59,7 @@
       </Menu>
       <Menu mnemonicParsing="false" text="Delete poly">
         <items>
-          <MenuItem mnemonicParsing="false" text="Delete poly 1" />
+          <MenuItem mnemonicParsing="false" text="Delete poly 1" onAction="#deletePoly"/>
         </items>
       </Menu>
     </MenuBar>
