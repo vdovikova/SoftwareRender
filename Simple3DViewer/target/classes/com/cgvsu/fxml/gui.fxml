@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.*?>
 
 <AnchorPane fx:id="anchorPane" styleClass="background" stylesheets="@../../../../java/com/cgvsu/DarkTheme.css" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cgvsu.GuiController">
-    <MenuBar prefHeight="25.0" prefWidth="549.0">
+    <MenuBar prefHeight="27.0" prefWidth="929.0">
         <Menu mnemonicParsing="false" text="File">
             <MenuItem mnemonicParsing="false" onAction="#onOpenModelMenuItemReadClick" text="Load Model">
                 <accelerator>
@@ -51,15 +51,21 @@
                 </accelerator>
             </MenuItem>
         </Menu>
-      <Menu mnemonicParsing="false" text="Choose active model">
+      <Menu mnemonicParsing="false" text="Change model activity">
         <items>
-          <MenuItem mnemonicParsing="false" text="Model 1" />
-            <MenuItem mnemonicParsing="false" text="Model 2" />
+          <MenuItem mnemonicParsing="false" onAction="#changeActivityOfModel1" text="Model 1" />
+            <MenuItem mnemonicParsing="false" onAction="#changeActivityOfModel2" text="Model 2" />
         </items>
       </Menu>
+        <Menu mnemonicParsing="false" text="Change model visibility">
+            <items>
+                <MenuItem mnemonicParsing="false" onAction="#changeVisibilityOfModel1" text="Model 1" />
+                <MenuItem mnemonicParsing="false" onAction="#changeVisibilityOfModel2" text="Model 2" />
+            </items>
+        </Menu>
       <Menu mnemonicParsing="false" text="Delete poly">
         <items>
-          <MenuItem mnemonicParsing="false" text="Delete poly 1" onAction="#deletePoly"/>
+          <MenuItem mnemonicParsing="false" onAction="#deletePoly" text="Delete poly 1" />
         </items>
       </Menu>
     </MenuBar>

@@ -16,7 +16,8 @@ public class Model {
     public List<Vector3f> normals;
     public List<Polygon> polygons;
 
-    public Model(final List<Vector3f> vertices, final List<Vector2f> textureVertices, final List<Vector3f> normals, final List<Polygon> polygons) {
+    public Model(final List<Vector3f> vertices, final List<Vector2f> textureVertices,
+                 final List<Vector3f> normals, final List<Polygon> polygons) {
         this.vertices = vertices;
         this.textureVertices = textureVertices;
         this.normals = normals;

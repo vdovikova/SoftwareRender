@@ -3,6 +3,7 @@ package com.cgvsu.objreader;
 import com.cgvsu.math.Vector2f;
 import com.cgvsu.math.Vector3f;
 import com.cgvsu.model.Model;
+import com.cgvsu.model.ModelOnStage;
 import com.cgvsu.model.Polygon;
 
 import java.util.ArrayList;
@@ -17,8 +18,8 @@ public class ObjReader {
 	private static final String OBJ_NORMAL_TOKEN = "vn";
 	private static final String OBJ_FACE_TOKEN = "f";
 
-	public static Model read(String fileContent) {
-		Model result = new Model();
+	public static ModelOnStage read(String fileContent) {
+		ModelOnStage result = new ModelOnStage();
 
 		int lineInd = 0;
 		Scanner scanner = new Scanner(fileContent);

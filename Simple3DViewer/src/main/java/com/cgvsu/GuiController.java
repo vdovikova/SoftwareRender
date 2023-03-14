@@ -1,5 +1,6 @@
 package com.cgvsu;
 
+import com.cgvsu.model.ModelOnStage;
 import com.cgvsu.objreader.ObjReaderException;
 import com.cgvsu.objwriter.ObjWriter;
 import com.cgvsu.polygonDeleter.PolygonDeleter;
@@ -19,6 +20,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.io.IOException;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.vecmath.Vector3f;
@@ -37,7 +39,7 @@ public class GuiController {
     @FXML
     private Canvas canvas;
 
-    private Model mesh = null;
+    private ArrayList<ModelOnStage> meshList = new ArrayList();
 
     private Camera camera = new Camera(
             new Vector3f(0, 00, 100),
@@ -61,9 +63,13 @@ public class GuiController {
             canvas.getGraphicsContext2D().clearRect(0, 0, width, height);
             camera.setAspectRatio((float) (width / height));
 
-            if (mesh != null) {
-                RenderEngine.render(canvas.getGraphicsContext2D(), camera, mesh, (int) width, (int) height);
-            } //цикл по списку моделей, рендерим активные модели
+            if (meshList != null) {
+                for (ModelOnStage mesh : meshList) {
+                    if (mesh != null && mesh.visiblity) {
+                        RenderEngine.render(canvas.getGraphicsContext2D(), camera, mesh, (int) width, (int) height);
+                    } //цикл по списку моделей, рендерим активные модели
+                }
+            }
         });
 
         timeline.getKeyFrames().add(frame);
@@ -86,7 +92,9 @@ public class GuiController {
 
         try {
             String fileContent = Files.readString(fileName);
-            mesh = ObjReader.read(fileContent); //добавлять в список моделей
+            ModelOnStage mesh = ObjReader.read(fileContent);
+//            mesh.isActive = true;
+            meshList.add(mesh); //добавлять в список моделей
             // todo: обработка ошибок
         } catch (IOException exception) {
             //обработать исключения здесь
@@ -99,42 +107,74 @@ public class GuiController {
         directoryChooser.setTitle("Save Model");
         String localPath = "";
 
-        File dir = directoryChooser.showDialog(canvas.getScene().getWindow());
-        if (dir != null) {
-            localPath = dir.getAbsolutePath();
-        }
+        for (ModelOnStage mesh : meshList) {
+            if (mesh.isActive) {
 
-        String filePath = localPath + "\\savedModel.obj";
-        try {
-            System.out.println("Creating file");
-            ObjWriter.createObjFile(filePath);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+                File dir = directoryChooser.showDialog(canvas.getScene().getWindow());
+                if (dir != null) {
+                    localPath = dir.getAbsolutePath();
+                }
 
-        File f = new File(filePath);
-        try {
-            System.out.println("Writing to file");
-            ObjWriter.writeToFile(mesh, f);
-        } catch (IOException e) {
-            e.printStackTrace();
+                String filePath = localPath + "\\savedModel.obj";
+                try {
+                    System.out.println("Creating file");
+                    ObjWriter.createObjFile(filePath);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                File f = new File(filePath);
+                try {
+                    System.out.println("Writing to file");
+                    ObjWriter.writeToFile(mesh, f);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
         System.out.println("Saved");
     }
 
     @FXML
     private void deletePoly() {
-        int size = mesh.polygons.size();
-        //удаление всего
-        for (int i = 1; i < size; i++) {
-            PolygonDeleter.deletePolygon(mesh, i);
+        for (ModelOnStage mesh : meshList) {
+            if (mesh.isActive) {
+                int size = mesh.polygons.size();
+                //удаление всего
+                for (int j = 1; j < size; j++) {
+                    PolygonDeleter.deletePolygon(mesh, j);
+                }
+                System.out.println("Vertices: " + mesh.getVertices().size());
+                System.out.println("Texture vertices: " + mesh.getTextureVertices().size());
+                System.out.println("Normals: " + mesh.getNormals().size());
+                System.out.println("Polygons: " + mesh.getPolygons().size());
+            }
         }
-        System.out.println("Vertices: " + mesh.getVertices().size());
-        System.out.println("Texture vertices: " + mesh.getTextureVertices().size());
-        System.out.println("Normals: " + mesh.getNormals().size());
-        System.out.println("Polygons: " + mesh.getPolygons().size());
     }
 
+    @FXML
+    private void changeActivityOfModel1() {
+        ModelOnStage mesh = meshList.get(0);
+        mesh.isActive = !mesh.isActive;
+    }
+
+    @FXML
+    private void changeActivityOfModel2() {
+        ModelOnStage mesh = meshList.get(1);
+        mesh.isActive = !mesh.isActive;
+    }
+
+    @FXML
+    private void changeVisibilityOfModel1() {
+        ModelOnStage mesh = meshList.get(0);
+        mesh.visiblity = !mesh.visiblity;
+    }
+
+    @FXML
+    private void changeVisibilityOfModel2() {
+        ModelOnStage mesh = meshList.get(1);
+        mesh.visiblity = !mesh.visiblity;
+    }
 
     @FXML
     public void handleCameraForward(ActionEvent actionEvent) {
