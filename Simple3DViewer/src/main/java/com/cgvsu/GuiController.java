@@ -16,6 +16,8 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 import javafx.stage.FileChooser;
 import javafx.util.Duration;
+
+import java.awt.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.io.IOException;
@@ -28,6 +30,7 @@ import javax.vecmath.Vector3f;
 import com.cgvsu.model.Model;
 import com.cgvsu.objreader.ObjReader;
 import com.cgvsu.render_engine.Camera;
+import javafx.scene.control.TextField;
 
 public class GuiController {
 
@@ -136,13 +139,23 @@ public class GuiController {
     }
 
     @FXML
+    private TextField fromIndexTextField;
+
+    @FXML
+    private TextField toIndexTextField;
+
+    @FXML
     private void deletePoly() {
+        int from = Integer.parseInt(fromIndexTextField.getText());
+        int to = Integer.parseInt(toIndexTextField.getText());
         for (ModelOnStage mesh : meshList) {
-            if (mesh.isActive) {
-                int size = mesh.polygons.size();
-                //удаление всего
-                for (int j = 1; j < size; j++) {
-                    PolygonDeleter.deletePolygon(mesh, j);
+            if ((mesh.isActive) && (from >= 0) && (to < mesh.polygons.size())
+                    && (from < to)) {
+                //удаление
+                for (int j = from; j <= to; j++) {
+                    if (j < mesh.polygons.size()) {
+                        PolygonDeleter.deletePolygon(mesh, j);
+                    }
                 }
                 System.out.println("Vertices: " + mesh.getVertices().size());
                 System.out.println("Texture vertices: " + mesh.getTextureVertices().size());

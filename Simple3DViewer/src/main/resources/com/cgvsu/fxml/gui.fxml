@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.*?>
 
 <AnchorPane fx:id="anchorPane" styleClass="background" stylesheets="@../../../../java/com/cgvsu/DarkTheme.css" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cgvsu.GuiController">
-    <MenuBar prefHeight="27.0" prefWidth="929.0">
+    <MenuBar prefHeight="27.0" prefWidth="627.0">
         <Menu mnemonicParsing="false" text="File">
             <MenuItem mnemonicParsing="false" onAction="#onOpenModelMenuItemReadClick" text="Load Model">
                 <accelerator>
@@ -71,4 +71,7 @@
     </MenuBar>
 
     <Canvas fx:id="canvas" height="870" width="1600" AnchorPane.topAnchor="30.0" />
+   <TextField fx:id="fromIndexTextField" layoutX="762.0" layoutY="30.0" prefHeight="20.0" prefWidth="75.0" promptText="от" />
+   <TextField fx:id="toIndexTextField" layoutX="762.0" layoutY="84.0" prefHeight="37.0" prefWidth="75.0" promptText="до" />
+   <Label layoutX="653.0" layoutY="3.0" text="Введите диапазон удаления полигонов" />
 </AnchorPane>
