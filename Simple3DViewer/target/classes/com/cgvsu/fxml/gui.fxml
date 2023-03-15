@@ -65,7 +65,7 @@
         </Menu>
       <Menu mnemonicParsing="false" text="Delete poly">
         <items>
-          <MenuItem mnemonicParsing="false" onAction="#deletePoly" text="Delete poly 1" />
+          <MenuItem mnemonicParsing="false" onAction="#deletePoly" text="Delete poly in range" />
         </items>
       </Menu>
     </MenuBar>
@@ -74,4 +74,7 @@
    <TextField fx:id="fromIndexTextField" layoutX="762.0" layoutY="30.0" prefHeight="20.0" prefWidth="75.0" promptText="от" />
    <TextField fx:id="toIndexTextField" layoutX="762.0" layoutY="84.0" prefHeight="37.0" prefWidth="75.0" promptText="до" />
    <Label layoutX="653.0" layoutY="3.0" text="Введите диапазон удаления полигонов" />
+   <Label layoutX="653.0" layoutY="151.0" text="В этой модели" />
+   <Label layoutX="852.0" layoutY="151.0" text="полигонов" />
+   <TextField fx:id="polyCounterTextField" editable="false" layoutX="762.0" layoutY="145.0" prefHeight="37.0" prefWidth="75.0" />
 </AnchorPane>
