@@ -70,7 +70,8 @@ public class GuiController {
                 for (ModelOnStage mesh : meshList) {
                     if (mesh != null && mesh.visiblity) {
                         RenderEngine.render(canvas.getGraphicsContext2D(), camera, mesh, (int) width, (int) height);
-                    } //цикл по списку моделей, рендерим активные модели
+                        polyCounterTextField.setText(String.valueOf(mesh.getPolygons().size()));
+                    } //цикл по списку моделей, рендерим видимые модели
                 }
             }
         });
@@ -96,11 +97,10 @@ public class GuiController {
         try {
             String fileContent = Files.readString(fileName);
             ModelOnStage mesh = ObjReader.read(fileContent);
-//            mesh.isActive = true;
-            meshList.add(mesh); //добавлять в список моделей
-            // todo: обработка ошибок
-        } catch (IOException exception) {
-            //обработать исключения здесь
+            meshList.add(mesh); //добавляем в список моделей
+        } catch (ObjReaderException.ObjFormatException | IOException |
+                ObjReaderException.ObjContentException | ObjReaderException.ObjRuntimeExeption exception) {
+            System.out.println(exception.getMessage());
         }
     }
 
@@ -145,16 +145,20 @@ public class GuiController {
     private TextField toIndexTextField;
 
     @FXML
+    private TextField polyCounterTextField;
+
+    @FXML
     private void deletePoly() {
         int from = Integer.parseInt(fromIndexTextField.getText());
         int to = Integer.parseInt(toIndexTextField.getText());
+
         for (ModelOnStage mesh : meshList) {
-            if ((mesh.isActive) && (from >= 0) && (to < mesh.polygons.size())
+            if ((mesh.isActive) && (from >= 0) && (to <= mesh.polygons.size())
                     && (from < to)) {
                 //удаление
                 for (int j = from; j <= to; j++) {
                     if (j < mesh.polygons.size()) {
-                        PolygonDeleter.deletePolygon(mesh, j);
+                        PolygonDeleter.deletePolygon(mesh, from);
                     }
                 }
                 System.out.println("Vertices: " + mesh.getVertices().size());
