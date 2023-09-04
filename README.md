@@ -1,2 +1,1 @@
 # SoftwareRender
-прости господи
